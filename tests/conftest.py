@@ -29,7 +29,7 @@ async def prepare_database():
         await conn.run_sync(Base.metadata.create_all)
 
     yield
-    
+    # SISKA
 @pytest_asyncio.fixture(autouse=True)
 async def clean_db():
 
