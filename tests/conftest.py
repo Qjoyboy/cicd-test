@@ -19,7 +19,17 @@ async def override_get_db():
         yield session
 
 app.dependency_overrides[get_db] = override_get_db
+from internal.db.base import Base
+from tests.database import engine_test
 
+@pytest_asyncio.fixture(scope="session", autouse=True)
+async def prepare_database():
+
+    async with engine_test.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    yield
+    
 @pytest_asyncio.fixture(autouse=True)
 async def clean_db():
 
